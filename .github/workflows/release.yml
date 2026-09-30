@@ -85,7 +85,9 @@ jobs:
           git -C $testBucket add bucket/vigolium.json
           git -C $testBucket -c user.name=Test -c user.email=test@example.com commit -m 'Validated candidate'
           if ($LASTEXITCODE -ne 0) { throw 'test bucket creation failed' }
-          & $scoop bucket add vigolium $testBucket
+          $testBucketUri = ([Uri]$testBucket).AbsoluteUri
+          & $scoop bucket add vigolium $testBucketUri
+          if ($LASTEXITCODE -ne 0) { throw 'test bucket registration failed' }
           & $scoop install vigolium/vigolium
           if ($LASTEXITCODE -ne 0) { throw 'Scoop install failed' }
           $binary = "$env:USERPROFILE/scoop/apps/vigolium/current/vigolium.exe"
